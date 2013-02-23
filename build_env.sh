@@ -2,7 +2,7 @@
 #
 #
 # author: gregory tomlinson
-# copyright: 2012
+# copyright: 2013
 # Liscense: MIT
 # 
 # 
