@@ -82,7 +82,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
-class BasicHandler(tornado.web.RequestHandler):
+class BasicHTMLHandler(tornado.web.RequestHandler):
 
     def render(self, *args, **kwargs):
         
@@ -173,9 +173,9 @@ echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
 #
 #
 echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
-echo "\n...................................................."
+echo "...................................................."
 echo "Your application $1"
-echo "....................................................\n"
+echo "...................................................."
 
 exit 0
 
