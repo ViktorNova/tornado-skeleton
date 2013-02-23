@@ -69,7 +69,7 @@ echo 'ENV="dev"' >> .env
 echo 'PORT=5000' >> .env
 echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
 
-echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:$PORT 'app.webapp:webapp()'" > Procfile
+echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
 
 
 VAR1=$(cat <<EOF
@@ -166,6 +166,8 @@ select yn in "yes" "no"; do
         no ) echo "skipped. run heroku.sh for new heroku apps"; break;;
     esac
 done
+
+echo "Your application $1"
 
 exit 0
 
