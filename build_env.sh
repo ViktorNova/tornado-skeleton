@@ -160,7 +160,7 @@ echo "${VAR2}" > templates/main.html
 popd
 
 echo "Create a new Heroku app?"
-select yn in "y" "n"; do
+select yn in "yes" "no"; do
     case $yn in
         yes ) ./heroku.sh; break;;
         no ) echo "skipped. run heroku.sh for new heroku apps"; break;;
