@@ -2,25 +2,27 @@
 #
 #
 # author: gregory tomlinson
-# Liscense MIT
+# copyright: 2012
+# Liscense: MIT
 # 
 # 
 # Usage:
 #     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/pah/myfunkkyapp
 # 
-# this was / is strongly influenced by
-# the great work by mike dory
+# Strongly influenced by
+# the great work by mike dory on Tornado-Heroku-Quickstart
 # https://github.com/mikedory/Tornado-Heroku-Quickstart
 #
 # this is customized for my "style" of app format
 # Assumes ruby Foreman is installed, adds
-# ec2 support via boto
+# ec2 support via boto. see README.md
 #
-# Use Foreman to manage the server process
+# Uses Foreman to manage the server process
 # via gunicorn
 # 
 # gunicorn for heroku start code via 
 # https://github.com/mccutchen
+# 
 if [ $# -lt 1 ]; then
   echo "APP folder path required"
   exit 0
@@ -63,7 +65,6 @@ echo "*.pyc" >> .gitignore
 echo ".DS_Store" >> .gitignore
 echo ".env" >> .gitignore
 echo "venv/" >> .gitignore
-
 echo 'ENV="dev"' >> .env
 echo 'PORT=5000' >> .env
 echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
@@ -158,18 +159,13 @@ echo "${VAR2}" > templates/main.html
 # leave the app/ dir
 popd
 
-# make a new Heroku app (or don't)
-echo "Do you want to start a Heroku app as well?"
+echo "Create a new Heroku app?"
 select yn in "y" "n"; do
     case $yn in
-        y ) ./heroku.sh; break;;
-        n ) echo "skipped. run heroku.sh for new heroku apps"; break;;
+        yes ) ./heroku.sh; break;;
+        no ) echo "skipped. run heroku.sh for new heroku apps"; break;;
     esac
 done
-
-# no need for this file anymore, eh?
-#echo "Cleaning up..."
-#rm ./$0
 
 exit 0
 
