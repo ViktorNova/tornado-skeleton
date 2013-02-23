@@ -5,6 +5,9 @@
 # Liscense MIT
 # 
 # 
+# Usage:
+#     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/pah/myfunkkyapp
+# 
 # this was / is strongly influenced by
 # the great work by mike dory
 # https://github.com/mikedory/Tornado-Heroku-Quickstart
@@ -23,6 +26,7 @@ if [ $# -lt 1 ]; then
   exit 0
 fi
 
+echo "Startin heroku-skeleton stub out, version 1.0"
 echo "Creating application $1"
 sleep 1
 mkdir -p $1
@@ -159,7 +163,7 @@ echo "Do you want to start a Heroku app as well?"
 select yn in "y" "n"; do
     case $yn in
         y ) ./heroku.sh; break;;
-        n ) echo "run heroku.sh for new heroku apps"; break;;
+        n ) echo "skipped. run heroku.sh for new heroku apps"; break;;
     esac
 done
 

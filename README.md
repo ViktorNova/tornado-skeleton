@@ -13,9 +13,12 @@ names in their documentation.
 Usage
 ------
 
-How to build your environment.
+  bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/pah/myfunkkyapp
+  
 
-  bash build_env.sh ~/tmp/path/to/appdir
+How to build your environment. The slower way
+
+  ./build_env.sh ~/tmp/path/to/appdir
 
 This script is destructive. Use on clean directories.
 
