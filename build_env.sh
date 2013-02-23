@@ -7,10 +7,10 @@
 # 
 # 
 # Usage:
-#     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/pah/myfunkkyapp
+#     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/app
 # 
 # Strongly influenced by
-# the great work by mike dory on Tornado-Heroku-Quickstart
+# the work by mike dory on Tornado-Heroku-Quickstart
 # https://github.com/mikedory/Tornado-Heroku-Quickstart
 #
 # this is customized for my "style" of app format
@@ -28,7 +28,7 @@ if [ $# -lt 1 ]; then
   exit 0
 fi
 
-echo "Startin heroku-skeleton stub out, version 1.0"
+echo "Starting heroku-skeleton stub out, version 1.0"
 echo "Creating application $1"
 sleep 3
 #
@@ -64,7 +64,6 @@ pip install gunicorn
 pip install redis
 pip install pylibmc
 pip install boto #ec2 / s3 connector
-
 
 
 VAR1=$(cat <<EOF

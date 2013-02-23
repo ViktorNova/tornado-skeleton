@@ -1,10 +1,21 @@
 
-
 Heroku Skeleton
 -------------
 
-This is inspired by Mike Dory's work
+This is inspired by Mike Dory's work on
 https://github.com/mikedory/Tornado-Heroku-Quickstart
+
+
+Description
+-------------
+
+Simple, one line environment build
+out for Tornado web applications
+
+Runs on Heroku, under gunicorn
+
+
+
 
 This is a bash script. Relies on 
 virtual env, which Heroku explicitly
@@ -13,20 +24,24 @@ names in their documentation.
 Usage
 ------
 
-    bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/pah/myfunkkyapp
+    bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/appdir
   
 
-How to build your environment. The slower way
-  # Download build_env.sh to your computer.
-  chmod +x build_env.sh
-  ./build_env.sh ~/tmp/path/to/appdir
+Or, you can clone the git repository
 
-This script is destructive. Use only on clean, empty, directories.
+    # Download build_env.sh to your computer.
+    git clone https://github.com/gregory80/heroku-skeleton.git
+    chmod +x build_env.sh
+    ./build_env.sh ~/path/to/appdir
 
-After you install, initialize a git repository,
-and active venv
+This script is destructive. Use only on clean, empty directories.
 
+After you install, initialize a git repository, active venv, start foreman
+
+    cd ~/path/to/appdir
+    git init . && git add . && git commit -m "initial commit"
     source venv/bin/activate
+    foreman start --procfile=Procfile 
 
 
 Structure
@@ -57,6 +72,7 @@ and file structure
     venv/
     Procfile
     requirements.txt
+    README.md
 
 
 
@@ -78,15 +94,31 @@ boto is added for ec2 / s3 support. Redis
 and Memcached are added as well as gunicorn
 
     pip freeze > requirements.txt 
-builds the  virtual environment.
+
+Builds the  virtual environment.
 
 Procfile is setup to be controlled via ruby's Foreman. 
 You may consider creating a DEV_Procfile for local
 development
 
-Enviromental settings simulated in 
+Enviromental settings simulated in, chiefly ENV, PORT and memcache
+values
 
     .env
+
+
+
+gunicorn for heroku start code via 
+https://github.com/mccutchen
+
+
+Requirements
+--------------
+
+tornado 2.4
+python 2.7
+virtual env
+
 
 
 
