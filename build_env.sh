@@ -24,31 +24,40 @@
 # https://github.com/mccutchen
 # 
 if [ $# -lt 1 ]; then
-  echo "APP folder path required"
+  echo "Usage: build_env.sh ../path/to/myapp"
   exit 0
 fi
 
 echo "Startin heroku-skeleton stub out, version 1.0"
 echo "Creating application $1"
-sleep 1
+sleep 3
+#
+# first create the directory
+#
 mkdir -p $1
 pushd $1
-
+#
+#
 mkdir -p app/scripts app/static
+touch README.md requirements.txt .gitignore .env
+# make virtual env
+#
+#
+virtualenv venv --distribute
+source venv/bin/activate
+
 pushd app
 # in the app folder
 touch webapp.py __init__.py
+#
+#
 mkdir -p static/js static/css static/graphics templates
-cd static/js
+pushd static/js
 echo "Get static JS files"
 curl -O http://code.jquery.com/jquery-1.9.1.js
 curl -O https://raw.github.com/jeffreytierney/newT/master/newT.js
 popd
-
-touch README.md requirements.txt .gitignore .env
-virtualenv venv --distribute
-source venv/bin/activate
-
+#
 # install some tornado packages
 pip install tornado
 pip install gunicorn
@@ -56,20 +65,6 @@ pip install redis
 pip install pylibmc
 pip install boto #ec2 / s3 connector
 
-pip freeze > requirements.txt
-
-# make virtual env
-
-echo "This is a stub, for tornado on heroku" > README.md
-echo "*.pyc" >> .gitignore
-echo ".DS_Store" >> .gitignore
-echo ".env" >> .gitignore
-echo "venv/" >> .gitignore
-echo 'ENV="dev"' >> .env
-echo 'PORT=5000' >> .env
-echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
-
-echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
 
 
 VAR1=$(cat <<EOF
@@ -89,9 +84,6 @@ logger = logging.getLogger()
 
 class BasicHandler(tornado.web.RequestHandler):
 
-    @property
-    def db(self):
-        return self.application.db
     def render(self, *args, **kwargs):
         
         kwargs.update({
@@ -105,7 +97,11 @@ class BasicHandler(tornado.web.RequestHandler):
 
 class MainHandler(BasicHandler):
     def get(self):
-        self.finish("I am the main")
+        logger.info("Hp request %s" % self.request)
+        self.render(
+            "main.html",
+            page_title="Heroku & Tornado",
+            )
 
 class Application(tornado.web.Application):
 
@@ -136,13 +132,13 @@ VAR2=$(cat <<EOF
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-  <title>{{page_title}}</title>
-  
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>{{page_title}} | App</title>  
 </head>
 <body>
-  This is the main
+  <div class="container">
+    This is the main container
+  </div>
 
 <script src="{{static_url("js/jquery-1.9.1.js")}}" type="text/javascript" charset="utf-8"></script>
 <script src="{{static_url("js/newT.js")}}" type="text/javascript" charset="utf-8"></script>
@@ -158,16 +154,28 @@ echo "${VAR1}" > webapp.py
 echo "${VAR2}" > templates/main.html
 # leave the app/ dir
 popd
-
-echo "Create a new Heroku app?"
-select yn in "yes" "no"; do
-    case $yn in
-        yes ) ./heroku.sh; break;;
-        no ) echo "skipped. run heroku.sh for new heroku apps"; break;;
-    esac
-done
-
+#
+# build the requirements file
+#
+pip freeze > requirements.txt
+echo "This is a stub for tornado on heroku" > README.md
+#
+#
+echo "*.pyc" >> .gitignore
+echo ".DS_Store" >> .gitignore
+echo ".env" >> .gitignore
+echo "venv/" >> .gitignore
+#
+#
+echo 'ENV="dev"' >> .env
+echo 'PORT=5000' >> .env
+echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
+#
+#
+echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
+echo "\n...................................................."
 echo "Your application $1"
+echo "....................................................\n"
 
 exit 0
 

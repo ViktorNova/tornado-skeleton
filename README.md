@@ -65,6 +65,11 @@ Activate virtual env
 
     source venv/bin/activate
 
+Run Foreman
+--------------
+
+    foreman start --procfile=Procfile 
+
 
 Additional Information
 ------------------
