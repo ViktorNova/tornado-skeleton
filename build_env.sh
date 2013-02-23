@@ -95,7 +95,7 @@ class BasicHTMLHandler(tornado.web.RequestHandler):
             self.set_header("X-UA-Compatible","chrome=1")
         return super(BasicHTMLHandler, self).render(*args, **kwargs)
 
-class MainHandler(BasicHandler):
+class MainHandler(BasicHTMLHandler):
     def get(self):
         logger.info("Hp request %s" % self.request)
         self.render(
