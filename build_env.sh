@@ -38,7 +38,7 @@ mkdir -p $1
 pushd $1
 #
 #
-mkdir -p app/scripts app/static
+mkdir -p app/scripts app/static app/config
 touch README.md requirements.txt .gitignore .env
 # make virtual env
 #
@@ -48,7 +48,7 @@ source venv/bin/activate
 
 pushd app
 # in the app folder
-touch webapp.py __init__.py
+touch webapp.py __init__.py config/dev.conf
 #
 #
 mkdir -p static/js static/css static/graphics templates
@@ -80,6 +80,8 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
+
+tornado.options.define("app_name", type=str)
 
 class BasicHTMLHandler(tornado.web.RequestHandler):
 
@@ -119,6 +121,10 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
 def webapp():
+    config_path = os.path.join(os.path.dirname(__file__), "config/%s.conf" % os.environ.get("ENV", "dev"))
+    tornado.options.parse_config_file( config_path )
+    logger.debug("Using config path: %s" % config_path)
+    logger.debug(tornado.options.options) 
     app = Application()
     return app
 
@@ -169,6 +175,10 @@ echo "venv/" >> .gitignore
 echo 'ENV="dev"' >> .env
 echo 'PORT=5000' >> .env
 echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
+#
+#
+#
+echo 'app_name="my example app"' >> app/config/dev.conf
 #
 #
 echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
