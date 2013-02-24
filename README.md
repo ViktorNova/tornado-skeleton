@@ -15,8 +15,6 @@ out for Tornado web applications
 Runs on Heroku, under gunicorn
 
 
-
-
 This is a bash script. Relies on 
 virtual env, which Heroku explicitly
 names in their documentation.

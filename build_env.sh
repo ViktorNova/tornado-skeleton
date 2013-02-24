@@ -25,7 +25,7 @@
 # 
 if [ $# -lt 1 ]; then
   echo "Usage: build_env.sh ../path/to/myapp"
-  exit 0
+  exit 1
 fi
 
 echo "Starting heroku-skeleton stub out, version 1.0"
