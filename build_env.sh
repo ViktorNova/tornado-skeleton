@@ -33,6 +33,7 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
+
 echo "Starting heroku-skeleton stub out, version 1.0"
 echo "Report issues to github issues:"
 echo "https://github.com/gregory80/heroku-skeleton"
@@ -64,16 +65,18 @@ pushd static/js > /dev/null
 echo "Get static JS files"
 curl -O http://code.jquery.com/jquery-1.9.1.js
 curl -O https://raw.github.com/jeffreytierney/newT/master/newT.js
-popd
+popd > /dev/null
 #
 # install some tornado packages
+#ec2 / s3 connector
+# redis and memcached
 pip install tornado
-pip install gunicorn
-pip install redis
-pip install pylibmc
-pip install boto #ec2 / s3 connector
-
-
+pip install gunicorn 
+pip install redis 
+pip install pylibmc 
+pip install boto 
+#
+#
 WEBAPP_STR=$(cat <<EOF
 import tornado
 import tornado.options
@@ -138,8 +141,9 @@ def webapp():
 
 EOF
 )
-
-
+#
+#
+#
 MAIN_STR=$(cat <<EOF
 
 <!DOCTYPE HTML>
@@ -163,7 +167,8 @@ var _example_var = {{json_encode({"foo":"bar"})}}
 
 EOF
 )
-
+#
+#
 RUNSCRIPT_STR=$(cat <<EOF
 #!/bin/bash
 
@@ -177,12 +182,13 @@ foreman start --procfile=./Procfile
 exit 0
 EOF
 )
-
+#
+#
 echo "${WEBAPP_STR}" > webapp.py
 echo "${MAIN_STR}" > templates/main.html
 echo "${RUNSCRIPT_STR}" > scripts/runlocal.sh
 # leave the app/ dir
-popd
+popd > /dev/null
 #
 # build the requirements file
 #
@@ -209,6 +215,6 @@ echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:web
 echo "...................................................."
 echo "Your application $1"
 echo "...................................................."
-
+#
 exit 0
 
