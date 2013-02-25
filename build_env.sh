@@ -4,10 +4,13 @@
 # author: gregory tomlinson
 # copyright: 2013
 # Liscense: MIT
+# repos: https://github.com/gregory80/heroku-skeleton
 # 
 # 
 # Usage:
 #     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/app
+#     cd ~/path/to/app
+#     bash app/scripts/runlocal.sh
 # 
 # Strongly influenced by
 # the work by mike dory on Tornado-Heroku-Quickstart
@@ -15,7 +18,9 @@
 #
 # this is customized for my "style" of app format
 # Assumes ruby Foreman is installed, adds
-# ec2 support via boto. see README.md
+# ec2 support via boto as well as
+# redis and memcached via pylibmc 
+# see README.md
 #
 # Uses Foreman to manage the server process
 # via gunicorn
@@ -29,13 +34,16 @@ if [ $# -lt 1 ]; then
 fi
 
 echo "Starting heroku-skeleton stub out, version 1.0"
+echo "Report issues to github issues:"
+echo "https://github.com/gregory80/heroku-skeleton"
 echo "Creating application $1"
-sleep 3
+echo "...................."
+sleep 1
 #
 # first create the directory
 #
 mkdir -p $1
-pushd $1
+pushd $1 > /dev/null
 #
 #
 mkdir -p app/scripts app/static app/config
@@ -46,13 +54,13 @@ touch README.md requirements.txt .gitignore .env
 virtualenv venv --distribute
 source venv/bin/activate
 
-pushd app
+pushd app > /dev/null
 # in the app folder
-touch webapp.py __init__.py config/dev.conf
+touch webapp.py __init__.py config/dev.conf scripts/runlocal.sh
 #
 #
 mkdir -p static/js static/css static/graphics templates
-pushd static/js
+pushd static/js > /dev/null
 echo "Get static JS files"
 curl -O http://code.jquery.com/jquery-1.9.1.js
 curl -O https://raw.github.com/jeffreytierney/newT/master/newT.js
@@ -66,7 +74,7 @@ pip install pylibmc
 pip install boto #ec2 / s3 connector
 
 
-VAR1=$(cat <<EOF
+WEBAPP_STR=$(cat <<EOF
 import tornado
 import tornado.options
 import tornado.web
@@ -132,7 +140,7 @@ EOF
 )
 
 
-VAR2=$(cat <<EOF
+MAIN_STR=$(cat <<EOF
 
 <!DOCTYPE HTML>
 <html>
@@ -155,8 +163,24 @@ var _example_var = {{json_encode({"foo":"bar"})}}
 
 EOF
 )
-echo "${VAR1}" > webapp.py
-echo "${VAR2}" > templates/main.html
+
+RUNSCRIPT_STR=$(cat <<EOF
+#!/bin/bash
+
+DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
+pushd \$DIR
+pushd ../..
+source venv/bin/activate
+# start foreman
+foreman start --procfile=./Procfile
+
+exit 0
+EOF
+)
+
+echo "${WEBAPP_STR}" > webapp.py
+echo "${MAIN_STR}" > templates/main.html
+echo "${RUNSCRIPT_STR}" > scripts/runlocal.sh
 # leave the app/ dir
 popd
 #

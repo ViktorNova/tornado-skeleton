@@ -15,14 +15,16 @@ out for Tornado web applications
 Runs on Heroku, under gunicorn
 
 
-This is a bash script. Relies on 
-virtual env, which Heroku explicitly
-names in their documentation.
-
+This is a bash script. The python
+packages are installed into an
+application specific virtual env (venv)
 Usage
 ------
 
     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/appdir
+    cd ~/path/to/app
+    bash app/scripts/runlocal.sh
+
   
 
 Or, you can clone the git repository
@@ -34,7 +36,7 @@ Or, you can clone the git repository
 
 This script is destructive. Use only on clean, empty directories.
 
-After you install, initialize a git repository, active venv, start foreman
+After you install, initialize a git repository, activate virtual env, start foreman
 
     cd ~/path/to/appdir
     git init . && git add . && git commit -m "initial commit"
@@ -45,8 +47,7 @@ After you install, initialize a git repository, active venv, start foreman
 Structure
 ---------
 
-Installs the following python
-packages to virtual env
+Installs the following python packages to virtual env
 
     tornado
     gunicorn
@@ -68,6 +69,8 @@ and file structure
         templates/
             main.html
     venv/
+        bin/
+            activate
     Procfile
     requirements.txt
     README.md
@@ -88,21 +91,19 @@ Run Foreman
 Additional Information
 ------------------
 
-boto is added for ec2 / s3 support. Redis
-and Memcached are added as well as gunicorn
+Get environmental config values using pip freeze.
+Example
 
     pip freeze > requirements.txt 
 
-Builds the  virtual environment.
 
 Procfile is setup to be controlled via ruby's Foreman. 
 You may consider creating a DEV_Procfile for local
 development
 
-Enviromental settings simulated in, chiefly ENV, PORT and memcache
-values
+Enviromental settings simulated in <code>.env</code> file, primarily 
+ENV, PORT and memcache values
 
-    .env
 
 
 
@@ -113,9 +114,9 @@ https://github.com/mccutchen
 Requirements
 --------------
 
-tornado 2.4
-python 2.7
-virtual env
+1. tornado 2.4
+1. python 2.7
+1. virtual env
 
 
 
