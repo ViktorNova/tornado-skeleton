@@ -9,13 +9,10 @@ https://github.com/mikedory/Tornado-Heroku-Quickstart
 Description
 -------------
 
-Simple, one line environment build
-out for Tornado web applications
+Simple, one line environment builder for Tornado web apps.
 
-Runs on Heroku, under gunicorn
-
-
-This is a bash script. The python
+Runs on Heroku, under gunicorn. Leverages 
+Redis & memcached. This is a bash script. The python
 packages are installed into an
 application specific virtual env (venv)
 Usage
@@ -31,8 +28,7 @@ Or, you can clone the git repository
 
     # Download build_env.sh to your computer.
     git clone https://github.com/gregory80/heroku-skeleton.git
-    chmod +x build_env.sh
-    ./build_env.sh ~/path/to/appdir
+    bash heroku-skeleton/build_env.sh ~/path/to/appdir
 
 This script is destructive. Use only on clean, empty directories.
 
@@ -75,7 +71,8 @@ and file structure
     Procfile
     requirements.txt
     README.md
-
+    .env
+    .gitignore
 
 
 Activate virtual env
