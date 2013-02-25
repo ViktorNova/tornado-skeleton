@@ -66,6 +66,7 @@ and file structure
             css/
             graphics/
         scripts/
+            runlocal.sh
         templates/
             main.html
     venv/
@@ -79,10 +80,12 @@ and file structure
 
 Activate virtual env
 --------------
+Activate the virtual env to enable the 
+same pacakages that run under runlocal.sh
 
     source venv/bin/activate
 
-Run Foreman
+Running foreman
 --------------
 
     foreman start --procfile=Procfile 
@@ -91,20 +94,18 @@ Run Foreman
 Additional Information
 ------------------
 
-Get environmental config values using pip freeze.
+Get environmental package config values using pip freeze.
 Example
 
     pip freeze > requirements.txt 
 
 
-Procfile is setup to be controlled via ruby's Foreman. 
-You may consider creating a DEV_Procfile for local
+Procfile is setup to be controlled via ruby's foreman. 
+You may consider creating a Dev_Procfile for local
 development
 
-Enviromental settings simulated in <code>.env</code> file, primarily 
-ENV, PORT and memcache values
-
-
+Enviromental config variables simulated in 
+<code>.env</code> file, primarily  ENV, PORT and memcache values
 
 
 gunicorn for heroku start code via 
