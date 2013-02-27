@@ -16,13 +16,11 @@ Redis & memcached. This is a bash script. The python
 packages are installed into an
 application specific virtual env (venv)
 Usage
-------
+-------------
 
     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/appdir
     cd ~/path/to/app
     bash app/scripts/runlocal.sh #start server on 5000
-
-  
 
 Or, you can clone the git repository
 
@@ -35,10 +33,7 @@ This script is destructive. Use only on clean, empty directories.
 After you install, initialize a git repository, activate virtual env, start foreman
 
     cd ~/path/to/appdir
-    git init . && git add . && git commit -m "initial commit"
-    source venv/bin/activate
-    foreman start --procfile=Procfile 
-
+    bash app/scripts/runlocal.sh
 
 Structure
 ---------
@@ -51,7 +46,7 @@ Installs the following python packages to virtual env
     pylibmc
     boto
     CoffeeScript
-    lesscss
+    lesscss/gi
 
 Builds the following directory
 and file structure

@@ -29,7 +29,7 @@
 # https://github.com/mccutchen
 # 
 if [ $# -lt 1 ]; then
-  echo "Usage: build_env.sh ../path/to/myapp"
+  echo "Usage: build_env.sh <../path/to/myapp>"
   exit 1
 fi
 #
@@ -80,10 +80,9 @@ done
 #
 popd > /dev/null
 #
-# install some tornado packages
-# ec2 / s3 connector
-# redis and memcached, lessjs
-# coffeescript
+# pip install basic packages
+# only tornado is TRULY needed
+# the rest make like easier
 pip install tornado
 pip install gunicorn 
 pip install redis 
@@ -91,7 +90,6 @@ pip install pylibmc
 pip install boto 
 pip install CoffeeScript
 pip install lesscss
-#
 #
 function readTmplFile {
   if [ -f "$1" ];
@@ -140,9 +138,21 @@ echo 'app_name="my example app"' >> app/config/dev.conf
 #
 #
 echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
+#
+# iniitalize git, add our files
+git init .
+git add .
+git commit -m "initial commit"
+#
+#
 echo "...................................................."
 echo "Your application $1"
+echo "Execute"
+echo "bash $1/app/scripts/runlocal.sh"
+echo "to start server on port 5000"
+echo "Configure local dev port .env"
 echo "...................................................."
+#
 #
 exit 0
 
