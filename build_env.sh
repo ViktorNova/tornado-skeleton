@@ -93,7 +93,6 @@ pip install CoffeeScript
 pip install lesscss
 #
 #
-#
 if [ -f "${SCRIPTDIR}/templates/webapp.py" ];
 then
   # use the local copy
