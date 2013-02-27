@@ -50,6 +50,8 @@ Installs the following python packages to virtual env
     redis
     pylibmc
     boto
+    CoffeeScript
+    lesscss
 
 Builds the following directory
 and file structure
