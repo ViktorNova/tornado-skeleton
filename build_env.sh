@@ -10,7 +10,7 @@
 # Usage:
 #     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/app
 #     cd ~/path/to/app
-#     bash app/scripts/runlocal.sh
+#     bash app/scripts/runlocal.sh #start server on port 5000
 # 
 # Strongly influenced by
 # the work by mike dory on Tornado-Heroku-Quickstart
@@ -32,6 +32,8 @@ if [ $# -lt 1 ]; then
   echo "Usage: build_env.sh ../path/to/myapp"
   exit 1
 fi
+
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 
 echo "Starting heroku-skeleton stub out, version 1.0"
@@ -62,9 +64,20 @@ touch webapp.py __init__.py config/dev.conf scripts/runlocal.sh
 #
 mkdir -p static/js static/css static/graphics templates
 pushd static/js > /dev/null
-echo "Get static JS files"
-curl -O http://code.jquery.com/jquery-1.9.1.js
-curl -O https://raw.github.com/jeffreytierney/newT/master/newT.js
+echo "Fetching static JS library files"
+jsfiles=(
+  'http://code.jquery.com/jquery-1.9.1.js' 
+  'http://backbonejs.org/backbone.js'
+  'http://underscorejs.org/underscore.js' 
+  'https://raw.github.com/janl/mustache.js/master/mustache.js'
+  )
+for jsfile in ${jsfiles[@]}
+do
+  filepath=(${jsfile//\// })
+  curl ${jsfile} -o ${filepath[${#filepath[@]}-1]} 2&> /dev/null
+done
+#
+#
 popd > /dev/null
 #
 # install some tornado packages
@@ -75,103 +88,37 @@ pip install gunicorn
 pip install redis 
 pip install pylibmc 
 pip install boto 
-#
-#
-WEBAPP_STR=$(cat <<EOF
-import tornado
-import tornado.options
-import tornado.web
-import os.path
-import sys
-import time
-import os
-import redis
-import pylibmc
-import logging
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
-
-tornado.options.define("app_name", type=str)
-
-class BasicHTMLHandler(tornado.web.RequestHandler):
-
-    def render(self, *args, **kwargs):
-        
-        kwargs.update({
-            "autoescape":None,
-            })
-        self.set_header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate")
-        self.set_header("Pragma", "no-cache")
-        if 'chromeframe' in self.request.headers.get('User-Agent', []):
-            self.set_header("X-UA-Compatible","chrome=1")
-        return super(BasicHTMLHandler, self).render(*args, **kwargs)
-
-class MainHandler(BasicHTMLHandler):
-    def get(self):
-        logger.info("Hp request %s" % self.request)
-        self.render(
-            "main.html",
-            page_title="Heroku & Tornado",
-            )
-
-class Application(tornado.web.Application):
-
-    def __init__(self):
-        handlers = [
-                (r"^/$", MainHandler),
-                ]
-        settings = dict(
-            cookie_secret="CHANGEMEPL3Z",
-            template_path=os.path.join(os.path.dirname(__file__), "templates"),
-            static_path=os.path.join(os.path.dirname(__file__), "static"),
-            debug=True,
-            xheaders=True,
-            autoescape=None,
-        )
-        tornado.web.Application.__init__(self, handlers, **settings)
-
-def webapp():
-    config_path = os.path.join(os.path.dirname(__file__), "config/%s.conf" % os.environ.get("ENV", "dev"))
-    tornado.options.parse_config_file( config_path )
-    logger.debug("Using config path: %s" % config_path)
-    logger.debug(tornado.options.options) 
-    app = Application()
-    return app
-
-EOF
-)
+pip install CoffeeScript
+pip install lesscss
 #
 #
 #
-MAIN_STR=$(cat <<EOF
+if [ -f "${SCRIPTDIR}/templates/webapp.py" ];
+then
+  # use the local copy
+  echo "Use local file"
+  WEBAPP_STR=$(<"${SCRIPTDIR}/templates/webapp.py")
+  
+else
+  # fail over to remote
+  WEBAPP_STR=<(curl -fsSL "https://github.com/gregory80/heroku-skeleton/blob/master/templates/webapp.py")  
+fi
 
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>{{page_title}} | App</title>  
-</head>
-<body>
-  <div class="container">
-    This is the main container
-  </div>
+if [ -f "${SCRIPTDIR}/templates/main.html" ];
+then
+  echo "Use local file"   
+  MAIN_STR=$(<"${SCRIPTDIR}/templates/main.html")
+else
+  WEBAPP_STR=<(curl -fsSL
+  "https://github.com/gregory80/heroku-skeleton/blob/master/templates/main.html")  
+fi
 
-<script src="{{static_url("js/jquery-1.9.1.js")}}" type="text/javascript" charset="utf-8"></script>
-<script src="{{static_url("js/newT.js")}}" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" charset="utf-8">
-var _example_var = {{json_encode({"foo":"bar"})}}
-</script>
-</body>
-</html>
-
-EOF
-)
+#value=$(<config.txt)
 #
 #
 RUNSCRIPT_STR=$(cat <<EOF
 #!/bin/bash
-
+#
 DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
 pushd \$DIR
 pushd ../..
@@ -205,7 +152,6 @@ echo "venv/" >> .gitignore
 echo 'ENV="dev"' >> .env
 echo 'PORT=5000' >> .env
 echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
-#
 #
 #
 echo 'app_name="my example app"' >> app/config/dev.conf
