@@ -20,7 +20,7 @@ Usage
 
     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/appdir
     cd ~/path/to/app
-    bash app/scripts/runlocal.sh
+    bash app/scripts/runlocal.sh #start server on 5000
 
   
 
@@ -58,7 +58,10 @@ and file structure
         static/
             js/
               jquery-1.9.1.js
-              newT.js
+              backbone.js
+              mustache.js
+              underscore.js
+              app.js
             css/
             graphics/
         scripts/
