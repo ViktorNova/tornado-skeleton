@@ -48,7 +48,7 @@ class AppPagesHandler(BasicHTMLHandler):
         self.render(
                 "main.html",
                 page_title="App Pages",
-                route_path=route_path,
+                route_path=route_path or "",
                 )
 
 class Application(tornado.web.Application):
@@ -56,10 +56,10 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
                 (r"^/$", MainHandler),
-                (r"^/(.*)$", AppPagesHandler),
+                (r"^/(.+)$", AppPagesHandler),
                 ]
         settings = dict(
-            cookie_secret="CHANGEMEPL3Z",
+            cookie_secret="CHANGEMEPL3ZABC123",
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             debug=True,

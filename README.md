@@ -115,6 +115,7 @@ Requirements
 1. tornado 2.4
 1. python 2.7
 1. virtual env
+1. foreman ( a ruby package )
 
 
 

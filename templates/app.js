@@ -2,7 +2,10 @@
 
 Mustache.tags = ["<%=", "%>"]; 
 // tonardo steals {{ }}
+var helpView = {
 
+  title:"help view"
+};
 var WorkspaceRouter = Backbone.Router.extend({
   routes:{
     "" : "homepage",
@@ -14,7 +17,8 @@ var WorkspaceRouter = Backbone.Router.extend({
   },
   help:function() {
     console.log("go go help");
-
+    var output = Mustache.render("<h1>this is <%=title%></h1>", helpView);
+    $(".container").append(output);
   }
 });
 
