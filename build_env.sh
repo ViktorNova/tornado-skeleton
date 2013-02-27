@@ -104,13 +104,22 @@ else
   echo "Use remote file"
   WEBAPP_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/webapp.py")  
 fi
-
+#
 if [ -f "${SCRIPTDIR}/templates/main.html" ];
 then
   echo "Use local file: main.html"   
   MAIN_STR=$(<"${SCRIPTDIR}/templates/main.html")
 else
-  WEBAPP_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")  
+  MAIN_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")  
+fi
+#
+#
+if [ -f "${SCRIPTDIR}/templates/app.js" ];
+then
+  echo "Use local file: app.js"   
+  APPJS_STR=$(<"${SCRIPTDIR}/templates/app.js")
+else
+  APPJS_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/app.js")  
 fi
 #
 #
@@ -132,6 +141,8 @@ EOF
 echo "${WEBAPP_STR}" > webapp.py
 echo "${MAIN_STR}" > templates/main.html
 echo "${RUNSCRIPT_STR}" > scripts/runlocal.sh
+echo "${APPJS_STR}" > static/js/app.js
+#
 # leave the app/ dir
 popd > /dev/null
 #

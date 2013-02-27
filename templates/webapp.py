@@ -42,12 +42,21 @@ class MainHandler(BasicHTMLHandler):
             "main.html",
             page_title="Heroku & Tornado",
             )
+class AppPagesHandler(BasicHTMLHandler):
+    def get(self, route_path):
+        logger.info("App pages request %s"  % self.request)
+        self.render(
+                "main.html",
+                page_title="App Pages",
+                route_path=route_path,
+                )
 
 class Application(tornado.web.Application):
 
     def __init__(self):
         handlers = [
                 (r"^/$", MainHandler),
+                (r"^/(.*)$", AppPagesHandler),
                 ]
         settings = dict(
             cookie_secret="CHANGEMEPL3Z",
