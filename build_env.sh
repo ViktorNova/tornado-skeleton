@@ -101,7 +101,8 @@ then
   
 else
   # fail over to remote
-  WEBAPP_STR=<(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/webapp.py")  
+  echo "Use remote file"
+  WEBAPP_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/webapp.py")  
 fi
 
 if [ -f "${SCRIPTDIR}/templates/main.html" ];
@@ -109,7 +110,7 @@ then
   echo "Use local file"   
   MAIN_STR=$(<"${SCRIPTDIR}/templates/main.html")
 else
-  WEBAPP_STR=<(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")  
+  WEBAPP_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")  
 fi
 
 #value=$(<config.txt)
