@@ -32,10 +32,10 @@ if [ $# -lt 1 ]; then
   echo "Usage: build_env.sh ../path/to/myapp"
   exit 1
 fi
-
+#
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-
+#
+#
 echo "Starting heroku-skeleton stub out, version 1.0"
 echo "Report issues to github issues:"
 echo "https://github.com/gregory80/heroku-skeleton"
@@ -81,8 +81,9 @@ done
 popd > /dev/null
 #
 # install some tornado packages
-#ec2 / s3 connector
-# redis and memcached
+# ec2 / s3 connector
+# redis and memcached, lessjs
+# coffeescript
 pip install tornado
 pip install gunicorn 
 pip install redis 
@@ -96,7 +97,7 @@ pip install lesscss
 if [ -f "${SCRIPTDIR}/templates/webapp.py" ];
 then
   # use the local copy
-  echo "Use local file"
+  echo "Use local file: webapp.py"
   WEBAPP_STR=$(<"${SCRIPTDIR}/templates/webapp.py")
   
 else
@@ -107,13 +108,11 @@ fi
 
 if [ -f "${SCRIPTDIR}/templates/main.html" ];
 then
-  echo "Use local file"   
+  echo "Use local file: main.html"   
   MAIN_STR=$(<"${SCRIPTDIR}/templates/main.html")
 else
   WEBAPP_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")  
 fi
-
-#value=$(<config.txt)
 #
 #
 RUNSCRIPT_STR=$(cat <<EOF
@@ -123,9 +122,9 @@ DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
 pushd \$DIR
 pushd ../..
 source venv/bin/activate
-# start foreman
+# start foreman, for local dev
 foreman start --procfile=./Procfile
-
+#
 exit 0
 EOF
 )
