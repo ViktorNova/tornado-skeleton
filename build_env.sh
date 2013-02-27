@@ -93,50 +93,23 @@ pip install CoffeeScript
 pip install lesscss
 #
 #
-if [ -f "${SCRIPTDIR}/templates/webapp.py" ];
-then
-  # use the local copy
-  echo "Use local file: webapp.py"
-  WEBAPP_STR=$(<"${SCRIPTDIR}/templates/webapp.py")
-  
-else
-  # fail over to remote
-  echo "Use remote file"
-  WEBAPP_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/webapp.py")  
-fi
-#
-if [ -f "${SCRIPTDIR}/templates/main.html" ];
-then
-  echo "Use local file: main.html"   
-  MAIN_STR=$(<"${SCRIPTDIR}/templates/main.html")
-else
-  MAIN_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")  
-fi
+function readTmplFile {
+  if [ -f "$1" ];
+  then
+    # use the local copy
+    cat $1
+  else
+    # fail over to remote
+    curl -fsSL "$2" 2>/dev/null
+  fi
+  return 0
+}
 #
 #
-if [ -f "${SCRIPTDIR}/templates/app.js" ];
-then
-  echo "Use local file: app.js"   
-  APPJS_STR=$(<"${SCRIPTDIR}/templates/app.js")
-else
-  APPJS_STR=$(curl -fsSL "https://raw.github.com/gregory80/heroku-skeleton/master/templates/app.js")  
-fi
-#
-#
-RUNSCRIPT_STR=$(cat <<EOF
-#!/bin/bash
-#
-DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
-pushd \$DIR
-pushd ../..
-source venv/bin/activate
-# start foreman, for local dev
-foreman start --procfile=./Procfile
-#
-exit 0
-EOF
-)
-#
+WEBAPP_STR=$(readTmplFile "${SCRIPTDIR}/templates/webapp.py" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/webapp.py")
+MAIN_STR=$(readTmplFile "${SCRIPTDIR}/templates/main.html" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")
+APPJS_STR=$(readTmplFile "${SCRIPTDIR}/templates/app.js" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/app.js")
+RUNSCRIPT_STR=$(readTmplFile "${SCRIPTDIR}/templates/runlocal.sh" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/runlocal.sh")
 #
 echo "${WEBAPP_STR}" > webapp.py
 echo "${MAIN_STR}" > templates/main.html
