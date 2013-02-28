@@ -11,44 +11,53 @@ Description
 
 Simple, one line environment builder for Tornado web apps.
 
-Runs on Heroku, under gunicorn. Leverages 
-Redis & memcached. This is a bash script. The python
-packages are installed into an
+Runs on Heroku. Leverages 
+Redis & memcached, Gunicorn and automatic 
+static file compiliation. 
+
+Python packages are installed into an
 application specific virtual env (venv)
-Usage
+
+
+Setup a Build Environment
 -------------
+
+The fastest way to setup in an enviroment. Creates a heroku-ready, 
+deployable environment.
 
     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/appdir
     cd ~/path/to/app
     bash app/scripts/runlocal.sh #start server on 5000
 
-Or, you can clone the git repository
+
+Clone Repos and Setup a Build Environment
+---------------
 
     # Download build_env.sh to your computer.
     git clone https://github.com/gregory80/heroku-skeleton.git
     bash heroku-skeleton/build_env.sh ~/path/to/appdir
 
-This script is destructive. Use only on clean, empty directories.
 
 After you install, initialize a git repository, activate virtual env, start foreman
+Access your new Tornado application via http://localhost:5000
 
     cd ~/path/to/appdir
     bash app/scripts/runlocal.sh
 
-Structure
+Python Structure
 ---------
 
-Installs the following python packages to virtual env
+When INSTALL_PIP is true, installs the following python packages to virtual env
 
     tornado
     gunicorn
     redis
     pylibmc
-    boto
-    CoffeeScript
-    lesscss
     lxml
 
+
+Folder Structure
+--------------
 Builds the following directory
 and file structure
 
@@ -74,6 +83,38 @@ and file structure
     README.md
     .env
     .gitignore
+
+Additional Configuration
+---------------------
+
+You can source in and override variables
+using boolean values. Set these in the home
+directory here
+
+    ~/.build_env.config
+
+Some examples:
+
+    INSTALL_PIP
+    INTALL_VENV
+    JS_FILES    
+    APP_FILES
+    BASE_GIT
+    SCRIPTDIR    
+
+Local or Remote
+---------------
+the build script will first attempt
+to pull all template files from the
+local build_templates/ directory.
+
+Should any item fail, it will resort
+to a cURL to to the git repository
+and fill in files from the remote
+version.
+
+This means a local folder can 
+be used to override any template files
 
 
 Activate virtual env

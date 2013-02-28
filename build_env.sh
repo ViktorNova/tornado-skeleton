@@ -22,9 +22,38 @@ if [ $# -lt 1 ]; then
   echo "Usage: build_env.sh <../path/to/myapp>"
   exit 1
 fi
+#
 # options
-INSTALL_PIP=false
+INSTALL_PIP=true
+INSTALL_VENV=true
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BASE_GIT="https://github.com/gregory80/heroku-skeleton/tree/master"
+JS_FILES=(
+  'http://code.jquery.com/jquery-1.9.1.js' 
+  'http://backbonejs.org/backbone.js'
+  'http://underscorejs.org/underscore.js' 
+  'https://raw.github.com/janl/mustache.js/master/mustache.js'
+  )
+APP_FILES=(
+  "Procfile" 
+  ".env" 
+  "app/config/dev.conf"
+  "requirements.txt"
+  "app/webapp.py" 
+  "app/templates/main.html"
+  "app/static/js/app.js" 
+  "app/scripts/compile.sh" 
+  "app/scripts/closure_compile.py" 
+  "app/scripts/runlocal.sh"
+  "app/scripts/compile.sh" 
+  "app/templates/ui_modules/scripttag.html"
+  )
+#
+# source in config file
+if [ -f "$HOME/.build_env.config" ]; then
+    echo "Found and sourcing ~/.build_env.config"
+    . "$HOME/.build_env.config"
+fi
 #
 #
 echo "Starting heroku-skeleton stub out, version 1.0"
@@ -45,8 +74,10 @@ touch README.md requirements.txt .gitignore .env
 # make virtual env
 #
 #
-virtualenv venv --distribute
-source venv/bin/activate
+if $INSTALL_VENV; then
+  virtualenv venv --distribute
+  source venv/bin/activate
+fi
 #
 pushd app > /dev/null
 # in the app folder
@@ -54,16 +85,11 @@ touch webapp.py __init__.py config/dev.conf scripts/runlocal.sh
 #
 #
 # Add External JS Files
-mkdir -p static/js static/css static/graphics templates
+mkdir -p static/js static/css static/graphics templates/ui_modules
 pushd static/js > /dev/null
 echo "Fetching static JS library files"
-jsfiles=(
-  'http://code.jquery.com/jquery-1.9.1.js' 
-  'http://backbonejs.org/backbone.js'
-  'http://underscorejs.org/underscore.js' 
-  'https://raw.github.com/janl/mustache.js/master/mustache.js'
-  )
-for jsfile in ${jsfiles[@]}
+#
+for jsfile in ${JS_FILES[@]}
 do
   filepath=(${jsfile//\// })
   curl ${jsfile} -o ${filepath[${#filepath[@]}-1]} 2&> /dev/null
@@ -71,8 +97,6 @@ done
 #
 #
 popd > /dev/null
-
-
 #
 function readTmplFile {
   if [ -f "$1" ];
@@ -91,12 +115,7 @@ function readTmplFile {
 # leave the app/ dir
 popd > /dev/null
 #
-known_files=("app/webapp.py" 
-  "app/templates/main.html" "app/static/js/app.js"
-  "app/scripts/compile.sh" "app/scripts/closure_compile.py"
-  "app/scripts/runlocal.sh" "app/scripts/compile.sh"
-  "app/uimodules/scripttag.html")
-for kfile in ${known_files[@]}
+for kfile in ${APP_FILES[@]}
 do
   file_str=$(readTmplFile "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}")
   echo "${file_str}" > ${kfile}
@@ -106,14 +125,7 @@ done
 # only tornado is TRULY needed
 # the rest make like easier
 if $INSTALL_PIP; then
-  pip install tornado
-  pip install gunicorn 
-  pip install redis 
-  pip install pylibmc 
-  pip install lxml
-  # pip install boto 
-  # pip install CoffeeScript
-  # pip install lesscss  
+  pip install -r "requirements.txt"
 fi
 #
 # build the requirements file
@@ -127,16 +139,6 @@ echo ".DS_Store" >> .gitignore
 echo ".env" >> .gitignore
 echo "venv/" >> .gitignore
 #
-#
-echo 'ENV="dev"' >> .env
-echo 'PORT=5000' >> .env
-echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
-#
-#
-echo 'app_name="my example app"' >> app/config/dev.conf
-#
-echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
-#
 # iniitalize git, add our files
 git init .
 git add .
@@ -145,10 +147,12 @@ git commit -m "initial commit"
 #
 echo "...................................................."
 echo "Your application $1"
-echo "Execute"
+echo "Start your webapp by executing"
 echo "bash $1/app/scripts/runlocal.sh"
 echo "to start server on port 5000"
-echo "Configure local dev port .env"
+echo ""
+echo "Configure local dev port with .env"
+echo "Did you know you can configure this script with ~/.build_env.config?"
 echo "...................................................."
 #
 #
