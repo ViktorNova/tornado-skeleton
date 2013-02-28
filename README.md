@@ -123,10 +123,10 @@ file. For example, if you wanted to use your own fork.
 
 Edit the config file.
 
-        ~/.build_env.config
+    ~/.build_env.config
 
-
-        BASE_GIT="https://github.com/<GIT USERNAME>/heroku-skeleton/tree/master"
+    # override the value
+    BASE_GIT="https://github.com/<GIT USERNAME>/heroku-skeleton/tree/master"
 
 
 Activate virtual env

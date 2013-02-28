@@ -9,11 +9,10 @@
     This is the main container
   </div>
 
-<script src="{{static_url("js/jquery-1.9.1.js")}}" type="text/javascript" charset="utf-8"></script>
-<script src="{{static_url("js/underscore.js")}}" type="text/javascript" charset="utf-8"></script>
-<script src="{{static_url("js/backbone.js")}}" type="text/javascript" charset="utf-8"></script>
-<script src="{{static_url("js/mustache.js")}}" type="text/javascript" charset="utf-8"></script>
-<script src="{{static_url("js/app.js")}}" type="text/javascript" charset="utf-8"></script>
+{% module JSFiles(("js/jquery-1.9.1.js", 
+"js/underscore.js", "js/backbone.js", 
+"js/mustache.js", "js/app.js")) %}
+
 <script type="text/javascript" charset="utf-8">
 var _example_var = {{json_encode({"foo":"bar"})}};
 Mustache.tags = ["<%=", "%>"]; // tonardo steal
