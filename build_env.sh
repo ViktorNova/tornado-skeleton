@@ -22,7 +22,8 @@ if [ $# -lt 1 ]; then
   echo "Usage: build_env.sh <../path/to/myapp>"
   exit 1
 fi
-#
+# options
+INSTALL_PIP=false
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #
 #
@@ -52,6 +53,7 @@ pushd app > /dev/null
 touch webapp.py __init__.py config/dev.conf scripts/runlocal.sh
 #
 #
+# Add External JS Files
 mkdir -p static/js static/css static/graphics templates
 pushd static/js > /dev/null
 echo "Fetching static JS library files"
@@ -69,18 +71,8 @@ done
 #
 #
 popd > /dev/null
-#
-# pip install basic packages
-# only tornado is TRULY needed
-# the rest make like easier
-pip install tornado
-pip install gunicorn 
-pip install redis 
-pip install pylibmc 
-# pip install boto 
-# pip install CoffeeScript
-# pip install lesscss
-pip install lxml
+
+
 #
 function readTmplFile {
   if [ -f "$1" ];
@@ -95,24 +87,34 @@ function readTmplFile {
 }
 #
 #
-BASE_GIT="https://raw.github.com/gregory80/heroku-skeleton/master"
-WEBAPP_STR=$(readTmplFile "${SCRIPTDIR}/templates/webapp.py" "${BASE_GIT}/templates/webapp.py")
-MAIN_STR=$(readTmplFile "${SCRIPTDIR}/templates/main.html" "${BASE_GIT}/templates/main.html")
-APPJS_STR=$(readTmplFile "${SCRIPTDIR}/templates/app.js" "${BASE_GIT}/templates/app.js")
-COMPILE_SHELL_STR=$(readTmplFile "${SCRIPTDIR}/templates/compile.sh" "${BASE_GIT}/templates/compile.sh")
-RUNSCRIPT_STR=$(readTmplFile "${SCRIPTDIR}/templates/runlocal.sh" "${BASE_GIT}/templates/runlocal.sh")
-COMPILE_PY_STR=$(readTmplFile "${SCRIPTDIR}/templates/closure_compile.py" "${BASE_GIT}/templates/closure_compile.py")
-#
-echo "${WEBAPP_STR}" > webapp.py
-echo "${MAIN_STR}" > templates/main.html
-echo "${RUNSCRIPT_STR}" > scripts/runlocal.sh
-echo "${APPJS_STR}" > static/js/app.js
-echo "${COMPILE_PY_STR}" > scripts/closure_compile.py
-echo "${COMPILE_SHELL_STR}" > scripts/compile.sh
-
 #
 # leave the app/ dir
 popd > /dev/null
+#
+known_files=("app/webapp.py" 
+  "app/templates/main.html" "app/static/js/app.js"
+  "app/scripts/compile.sh" "app/scripts/closure_compile.py"
+  "app/scripts/runlocal.sh" "app/scripts/compile.sh"
+  "app/uimodules/scripttag.html")
+for kfile in ${known_files[@]}
+do
+  file_str=$(readTmplFile "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}")
+  echo "${file_str}" > ${kfile}
+done
+#
+# pip install basic packages
+# only tornado is TRULY needed
+# the rest make like easier
+if $INSTALL_PIP; then
+  pip install tornado
+  pip install gunicorn 
+  pip install redis 
+  pip install pylibmc 
+  pip install lxml
+  # pip install boto 
+  # pip install CoffeeScript
+  # pip install lesscss  
+fi
 #
 # build the requirements file
 #
