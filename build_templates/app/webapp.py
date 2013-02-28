@@ -16,7 +16,7 @@ import os
 import redis
 import pylibmc
 import logging
-import uimodules
+import ui_modules
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()

@@ -114,7 +114,19 @@ and fill in files from the remote
 version.
 
 This means a local folder can 
-be used to override any template files
+be used to override any template files. You can easily
+override this by setting a local build_templates folder
+or if you are running via CURL download one-liner
+set it to fetch from a different repository for 
+overriding <code>BASE_GIT</code> in the ~/.build_env.config
+file. For example, if you wanted to use your own fork.
+
+Edit the config file.
+
+        ~/.build_env.config
+
+
+        BASE_GIT="https://github.com/<GIT USERNAME>/heroku-skeleton/tree/master"
 
 
 Activate virtual env

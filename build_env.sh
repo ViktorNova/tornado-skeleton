@@ -44,6 +44,7 @@ APP_FILES=(
   "app/static/js/app.js" 
   "app/scripts/compile.sh" 
   "app/scripts/closure_compile.py" 
+  "app/ui_modules.py"
   "app/scripts/runlocal.sh"
   "app/scripts/compile.sh" 
   "app/templates/ui_modules/scripttag.html"
