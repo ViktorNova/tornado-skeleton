@@ -1,29 +1,19 @@
 #!/bin/bash
 #
-#
 # author: gregory tomlinson
 # copyright: 2013
 # Liscense: MIT
 # repos: https://github.com/gregory80/heroku-skeleton
-# 
 # 
 # Usage:
 #     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/app
 #     cd ~/path/to/app
 #     bash app/scripts/runlocal.sh #start server on port 5000
 # 
-# Strongly influenced by
-# the work by mike dory on Tornado-Heroku-Quickstart
+# Inspired by mike dory on Tornado-Heroku-Quickstart
 # https://github.com/mikedory/Tornado-Heroku-Quickstart
 #
-# this is customized for my "style" of app format
-# Assumes ruby Foreman is installed, adds
-# ec2 support via boto as well as
-# redis and memcached via pylibmc 
 # see README.md
-#
-# Uses Foreman to manage the server process
-# via gunicorn
 # 
 # gunicorn for heroku start code via 
 # https://github.com/mccutchen
@@ -87,9 +77,10 @@ pip install tornado
 pip install gunicorn 
 pip install redis 
 pip install pylibmc 
-pip install boto 
-pip install CoffeeScript
-pip install lesscss
+# pip install boto 
+# pip install CoffeeScript
+# pip install lesscss
+pip install lxml
 #
 function readTmplFile {
   if [ -f "$1" ];
@@ -104,15 +95,21 @@ function readTmplFile {
 }
 #
 #
-WEBAPP_STR=$(readTmplFile "${SCRIPTDIR}/templates/webapp.py" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/webapp.py")
-MAIN_STR=$(readTmplFile "${SCRIPTDIR}/templates/main.html" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/main.html")
-APPJS_STR=$(readTmplFile "${SCRIPTDIR}/templates/app.js" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/app.js")
-RUNSCRIPT_STR=$(readTmplFile "${SCRIPTDIR}/templates/runlocal.sh" "https://raw.github.com/gregory80/heroku-skeleton/master/templates/runlocal.sh")
+BASE_GIT="https://raw.github.com/gregory80/heroku-skeleton/master"
+WEBAPP_STR=$(readTmplFile "${SCRIPTDIR}/templates/webapp.py" "${BASE_GIT}/templates/webapp.py")
+MAIN_STR=$(readTmplFile "${SCRIPTDIR}/templates/main.html" "${BASE_GIT}/templates/main.html")
+APPJS_STR=$(readTmplFile "${SCRIPTDIR}/templates/app.js" "${BASE_GIT}/templates/app.js")
+COMPILE_SHELL_STR=$(readTmplFile "${SCRIPTDIR}/templates/compile.sh" "${BASE_GIT}/templates/compile.sh")
+RUNSCRIPT_STR=$(readTmplFile "${SCRIPTDIR}/templates/runlocal.sh" "${BASE_GIT}/templates/runlocal.sh")
+COMPILE_PY_STR=$(readTmplFile "${SCRIPTDIR}/templates/closure_compile.py" "${BASE_GIT}/templates/closure_compile.py")
 #
 echo "${WEBAPP_STR}" > webapp.py
 echo "${MAIN_STR}" > templates/main.html
 echo "${RUNSCRIPT_STR}" > scripts/runlocal.sh
 echo "${APPJS_STR}" > static/js/app.js
+echo "${COMPILE_PY_STR}" > scripts/closure_compile.py
+echo "${COMPILE_SHELL_STR}" > scripts/compile.sh
+
 #
 # leave the app/ dir
 popd > /dev/null
@@ -135,7 +132,6 @@ echo 'MEMCACHE_SERVERS="127.0.0.1"' >> .env
 #
 #
 echo 'app_name="my example app"' >> app/config/dev.conf
-#
 #
 echo "web: gunicorn -k tornado --workers=4 --bind=0.0.0.0:\$PORT 'app.webapp:webapp()'" > Procfile
 #

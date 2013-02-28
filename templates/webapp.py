@@ -16,6 +16,7 @@ import os
 import redis
 import pylibmc
 import logging
+import ui_modules
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -59,6 +60,7 @@ class Application(tornado.web.Application):
                 (r"^/(.+)$", AppPagesHandler),
                 ]
         settings = dict(
+            ui_modules=ui_modules,                   
             cookie_secret="CHANGEMEPL3ZABC123",
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),

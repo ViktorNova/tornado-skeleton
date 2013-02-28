@@ -46,7 +46,8 @@ Installs the following python packages to virtual env
     pylibmc
     boto
     CoffeeScript
-    lesscss/gi
+    lesscss
+    lxml
 
 Builds the following directory
 and file structure
