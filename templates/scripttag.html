@@ -1,0 +1,6 @@
+{% if current_env == "dev" %}
+{% for jfile in js_files %}
+<script src="{{static_url(jfile)}}" type="text/javascript"></script>{% end %}
+{% else %}
+<script src="{{static_url("js/%s.js" % compiled_name )}}" type="text/javascript"></script>
+{% end %}
