@@ -53,7 +53,7 @@ When INSTALL_PIP is true, installs the following python packages to virtual env
     gunicorn
     redis
     pylibmc
-    lxml
+    beatutifulsoup4
 
 
 Folder Structure
@@ -162,6 +162,20 @@ Enviromental config variables simulated in
 gunicorn for heroku start code via 
 https://github.com/mccutchen
 
+
+Compilation Rules
+-----------------
+The JavaScript files are compiled with each commit, using the pre-commit-msg hook. 
+Applications are assumed to be Single Page Applications. The compilation
+script queries the HTML via the running webserver.
+
+Script tags are parsed from the http://localhost:5000/. All scripts are 
+subsequently queried to form a single, raw string.
+
+This string of JavaScript code is sent to google closure compiler web service API
+using the ADVANCED_COMPILATIONS option. 
+
+Compiled script is substitued for individual files in any environment besides DEV
 
 Requirements
 --------------
