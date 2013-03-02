@@ -29,17 +29,6 @@ def read_url( host, path, params, method_type="GET" ):
 	conn.close()
 	return data		
 
-def build_params(src_lst):
-	args = [
-	    ('output_format', 'text'),
-		('compilation_level', tornado.options.options.compilation_level),	    	    	    
-		# ('compilation_level', 'SIMPLE_OPTIMIZATIONS'),	    
-	    ('output_info', 'compiled_code'),
-	]
-	lst = [('code_url', src) for src in src_lst]
-	args.extend(lst)
-	return args
-
 def find_scriptsrc(html_str):
 	soup = BeautifulSoup(html_str)	
 	found_tags = soup.find_all("script", src=True)
@@ -55,6 +44,18 @@ def get_url(default_url="http://localhost:5000/"):
 	else:
 		url = default_url
 	return url
+
+def compile_static_str( script_str, output="compiled_code" ):
+	params = [   
+	    ('output_format', 'text'),
+	    ('js_code', script_str),
+	    ('compilation_level', tornado.options.options.compilation_level),	    
+	    ('output_info', output),
+	]
+	params_str = urllib.urlencode(params)
+	closure_host = 'closure-compiler.appspot.com'
+	return read_url(closure_host, '/compile', params_str, method_type="POST")
+	
 
 if __name__ == "__main__":
 
@@ -73,21 +74,16 @@ if __name__ == "__main__":
 		# fetch script contents
 		script_str += read_url(compile_host, scripts, "")
 
+
+	# get stats for what we are compiling
+	print compile_static_str(script_str, output="statistics")
 	# print script_str
 	# pass
-	params = [   
-	    ('output_format', 'text'),
-	    ('js_code', script_str),
-	    ('compilation_level', tornado.options.options.compilation_level),
-		# ('compilation_level', 'SIMPLE_OPTIMIZATIONS'),	    
-	    ('output_info', 'compiled_code'),
-	]
-	params_str = urllib.urlencode(params)
-	closure_host = 'closure-compiler.appspot.com'
-	compiled_str = read_url(closure_host, '/compile', params_str, method_type="POST")
+	compiled_str = compile_static_str( script_str )
 	filepath = os.path.join(os.path.dirname(__file__), "..", "static/js/compiled.js")
 	print "Compiled length %s" % len(compiled_str)
-	write_file(filepath, compiled_str)
+	print "writing JS compiled string to %s" % filepath
+ 	write_file(filepath, compiled_str)	
 
 
 	

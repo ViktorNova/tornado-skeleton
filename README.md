@@ -2,28 +2,29 @@
 Heroku Skeleton
 -------------
 
-This is inspired by Mike Dory's work on
-https://github.com/mikedory/Tornado-Heroku-Quickstart
-
-
-Description
--------------
-
 Simple, one line environment builder for Tornado web apps.
 
-Runs on Heroku. Leverages 
-Redis & memcached, Gunicorn and automatic 
-static file compiliation. 
+Supports Procfile start / stop. Ideal for heroku
 
-Python packages are installed into an
-application specific virtual env (venv)
+Adds static JS file compilation via Google Closure Compiler
+web service API. Compile static files on any machine with an
+internet connection. No need to install Java!
 
+Leverages environmental specific configuration files.
+
+Inspiration
+------------
+
+This is inspired by Mike Dory's work on
+https://github.com/mikedory/Tornado-Heroku-Quickstart as well as 
+[Ruby on Rails](http://rubyonrails.org/) fully integrated development
+environment.
 
 Setup a Build Environment
 -------------
 
 The fastest way to setup in an enviroment. Creates a heroku-ready, 
-deployable environment.
+deployable environment in seconds.
 
     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/appdir
     cd ~/path/to/app
@@ -73,6 +74,8 @@ and file structure
             graphics/
         scripts/
             runlocal.sh
+            compile.sh
+            closure_compile.py
         templates/
             main.html
     venv/
@@ -104,24 +107,24 @@ Some examples:
 
 Local or Remote
 ---------------
-the build script will first attempt
-to pull all template files from the
+The build script will first attempt to utilize all template files from the
 local build_templates/ directory.
 
-Should any item fail, it will resort
-to a cURL to to the git repository
-and fill in files from the remote
-version.
+Should any file fail, script will make a cURL call to the git repository
+and fill in files from the remote version.
 
 This means a local folder can 
 be used to override any template files. You can easily
 override this by setting a local build_templates folder
-or if you are running via CURL download one-liner
+or if you are installing via cURL download one-liner
 set it to fetch from a different repository for 
 overriding <code>BASE_GIT</code> in the ~/.build_env.config
-file. For example, if you wanted to use your own fork.
+file. For example, if you wanted to use your own fork, edit 
+the <code>~/.bash_env.config</code> in your home directory.
 
-Edit the config file.
+
+Edit the config file
+-----------------
 
     ~/.build_env.config
 
@@ -139,28 +142,11 @@ same pacakages that run under runlocal.sh
 Running foreman
 --------------
 
+Locally, starting the service to also include setting in your 
+.env file, is done with foreman, a ruby package. 
+[Installing foreman](http://rubygems.org/gems/foreman)
+
     foreman start --procfile=Procfile 
-
-
-Additional Information
-------------------
-
-Get environmental package config values using pip freeze.
-Example
-
-    pip freeze > requirements.txt 
-
-
-Procfile is setup to be controlled via ruby's foreman. 
-You may consider creating a Dev_Procfile for local
-development
-
-Enviromental config variables simulated in 
-<code>.env</code> file, primarily  ENV, PORT and memcache values
-
-
-gunicorn for heroku start code via 
-https://github.com/mccutchen
 
 
 Compilation Rules
@@ -176,6 +162,29 @@ This string of JavaScript code is sent to google closure compiler web service AP
 using the ADVANCED_COMPILATIONS option. 
 
 Compiled script is substitued for individual files in any environment besides DEV
+
+
+
+Additional Information
+------------------
+
+Get environmental package config values using pip freeze.
+
+    pip freeze > requirements.txt 
+
+
+Procfile is setup to be controlled via ruby's foreman. 
+You may consider creating a Dev_Procfile for local
+development
+
+Enviromental config variables simulated in 
+<code>.env</code> file, primarily  ENV, PORT and memcached host values.
+
+
+gunicorn for heroku start code via 
+https://github.com/mccutchen
+
+
 
 Requirements
 --------------
