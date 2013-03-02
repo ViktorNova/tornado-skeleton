@@ -27,20 +27,21 @@ The fastest way to setup in an enviroment. Creates a heroku-ready,
 deployable environment in seconds.
 
     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/appdir
-    cd ~/path/to/app
-    bash app/scripts/runlocal.sh #start server on 5000
+    cd ~/path/to/appdir
+    bash app/scripts/runlocal.sh #starts server on http://localhost:5000
 
 
 Clone Repos and Setup a Build Environment
 ---------------
 
-    # Download build_env.sh to your computer.
+Download build_env.sh to your computer using GIT
+
     git clone https://github.com/gregory80/heroku-skeleton.git
     bash heroku-skeleton/build_env.sh ~/path/to/appdir
 
 
-After you install, initialize a git repository, activate virtual env, start foreman
-Access your new Tornado application via http://localhost:5000
+After you install, initialize a git repository, activate virtual env, start foreman.
+Once started, access your new Tornado application via http://localhost:5000
 
     cd ~/path/to/appdir
     bash app/scripts/runlocal.sh
@@ -48,7 +49,8 @@ Access your new Tornado application via http://localhost:5000
 Python Structure
 ---------
 
-When INSTALL_PIP is true, installs the following python packages to virtual env
+When INSTALL_PIP is true, installs the following python packages to your
+application specific virtual env
 
     tornado
     gunicorn
@@ -63,6 +65,12 @@ Builds the following directory
 and file structure
 
     app/
+        webapp.py
+        ui_modules.py
+        config/
+            dev.conf
+        hooks/
+            pre-commit-msg.sh
         static/
             js/
               jquery-1.9.1.js
@@ -77,7 +85,9 @@ and file structure
             compile.sh
             closure_compile.py
         templates/
-            main.html
+            main.html        
+            ui_modules/
+                scripttag.html
     venv/
         bin/
             activate

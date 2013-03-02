@@ -48,6 +48,7 @@ APP_FILES=(
   "app/scripts/runlocal.sh"
   "app/scripts/compile.sh" 
   "app/templates/ui_modules/scripttag.html"
+  "app/hooks/pre-commit-msg.sh"
   )
 #
 # source in config file
@@ -57,7 +58,7 @@ if [ -f "$HOME/.build_env.config" ]; then
 fi
 #
 #
-echo "Starting heroku-skeleton stub out, version 1.0"
+echo "Starting heroku-skeleton stub out, version 0.0.1"
 echo "Report issues to github issues:"
 echo "https://github.com/gregory80/heroku-skeleton"
 echo "Creating application $1"
@@ -70,7 +71,7 @@ mkdir -p $1
 pushd $1 > /dev/null
 #
 #
-mkdir -p app/scripts app/static app/config
+mkdir -p app/scripts app/static app/config app/hooks
 touch README.md requirements.txt .gitignore .env
 # make virtual env
 #
@@ -142,8 +143,15 @@ echo "venv/" >> .gitignore
 #
 # iniitalize git, add our files
 git init .
+#
+# commit it
 git add .
 git commit -m "initial commit"
+#
+# add hooks, hooks require web app started!
+chmod +x app/hooks/pre-commit-msg.sh
+# requires abs path b/c is an alias
+ln -s $1/app/hooks/pre-commit-msg.sh .git/hooks/pre-commit
 #
 #
 echo "...................................................."
@@ -153,7 +161,7 @@ echo "bash $1/app/scripts/runlocal.sh"
 echo "to start server on port 5000"
 echo ""
 echo "Configure local dev port with .env"
-echo "Did you know you can configure this script with ~/.build_env.config?"
+echo "Did you know? You can configure this script with ~/.build_env.config"
 echo "...................................................."
 #
 #

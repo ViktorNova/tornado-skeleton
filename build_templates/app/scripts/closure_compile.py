@@ -67,7 +67,11 @@ if __name__ == "__main__":
 	compile_host = _data.netloc
 
 	# find script tags, parsing HTML response
-	urldata = read_url(compile_host, _data.path or "/", "")
+	try:
+		urldata = read_url(compile_host, _data.path or "/", "")
+	except Exception,e:
+		print "ERROR, service not started"
+		sys.exit(1)
 	script_srcs = find_scriptsrc(urldata)
 	script_str = ""
 	for scripts in script_srcs:
