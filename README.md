@@ -40,7 +40,7 @@ Download build_env.sh to your computer using GIT
     bash heroku-skeleton/build_env.sh ~/path/to/appdir
 
 
-After you install, initialize a git repository, activate virtual env, start foreman.
+After you install, initialize a git repository, activate virtual env, start the server
 Once started, access your new Tornado application via http://localhost:5000
 
     cd ~/path/to/appdir
@@ -149,14 +149,14 @@ same pacakages that run under runlocal.sh
 
     source venv/bin/activate
 
-Running foreman
+Running honcho
 --------------
 
 Locally, starting the service to also include setting in your 
-.env file, is done with foreman, a ruby package. 
-[Installing foreman](http://rubygems.org/gems/foreman)
+.env file, is done with honco 
 
-    foreman start --procfile=Procfile 
+
+    honcho start --procfile=Procfile 
 
 
 Compilation Rules
@@ -183,7 +183,7 @@ Get environmental package config values using pip freeze.
     pip freeze > requirements.txt 
 
 
-Procfile is setup to be controlled via ruby's foreman. 
+Procfile is setup to be controlled via honcho
 You may consider creating a Dev_Procfile for local
 development
 
@@ -202,7 +202,7 @@ Requirements
 1. tornado 2.4
 1. python 2.7
 1. virtual env
-1. foreman ( a ruby package )
+
 
 
 

@@ -5,6 +5,6 @@ pushd $DIR
 pushd ../..
 source venv/bin/activate
 # start foreman, for local dev
-foreman start --procfile=./Procfile
+honcho start --procfile=./Procfile
 #
 exit 0

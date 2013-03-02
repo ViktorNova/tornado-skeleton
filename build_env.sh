@@ -155,12 +155,12 @@ ln -s $1/app/hooks/pre-commit-msg.sh .git/hooks/pre-commit
 #
 #
 echo "...................................................."
-echo "Your application $1"
+echo "Your application is ready! $1"
 echo "Start your webapp by executing"
 echo "bash $1/app/scripts/runlocal.sh"
 echo "to start server on port 5000"
 echo ""
-echo "Configure local dev port with .env"
+echo "Configure local dev environment with .env"
 echo "Did you know? You can configure this script with ~/.build_env.config"
 echo "...................................................."
 #
