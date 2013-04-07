@@ -101,15 +101,14 @@ done
 popd > /dev/null
 #
 function readTmplFile {
-  if [ -f "$1" ];
-  then
+  if [ -f "$2" ]; then
     # echo "copying local file $1"
     # use the local copy
-    cat $1
+    cat $2 > $1
   else
     # fail over to remote
     # echo "Requesting $2"
-    curl -fsSL "$2" 2>/dev/null
+    curl -fsSL "$3" -o $1 2>/dev/null
   fi
   return 0
 }
@@ -122,9 +121,9 @@ popd > /dev/null
 for kfile in ${APP_FILES[@]}
 do
   # echo "attempt to copy ${kfile}"
-  echo "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}"
-  file_str=$(readTmplFile "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}")
-  echo "${file_str}" > ${kfile}
+  # echo "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}"
+  readTmplFile "${kfile}" "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}"
+  # echo "${file_str}" > ${kfile}
 done
 #
 # pip install basic packages
@@ -134,7 +133,7 @@ if $INSTALL_PIP; then
   echo "Installing pip from requirements.txt"
   cat "requirements.txt"
   pip install -r requirements.txt
-  echo ls -la
+  # echo ls -la
 fi
 #
 # build the requirements file
