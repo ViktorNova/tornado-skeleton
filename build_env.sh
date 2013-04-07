@@ -103,12 +103,12 @@ popd > /dev/null
 function readTmplFile {
   if [ -f "$1" ];
   then
-    echo "copying local file $1"
+    # echo "copying local file $1"
     # use the local copy
     cat $1
   else
     # fail over to remote
-    echo "Requesting $2"
+    # echo "Requesting $2"
     curl -fsSL "$2" 2>/dev/null
   fi
   return 0
@@ -121,6 +121,8 @@ popd > /dev/null
 #
 for kfile in ${APP_FILES[@]}
 do
+  # echo "attempt to copy ${kfile}"
+  echo "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}"
   file_str=$(readTmplFile "${SCRIPTDIR}/build_templates/${kfile}" "${BASE_GIT}/build_templates/${kfile}")
   echo "${file_str}" > ${kfile}
 done
