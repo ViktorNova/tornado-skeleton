@@ -108,7 +108,7 @@ function readTmplFile {
   else
     # fail over to remote
     # echo "Requesting $2"
-    curl -fsSL "$3" -o $1 2>/dev/null
+    curl -fsSL "$3" -o "$1" 2>/dev/null
   fi
   return 0
 }
