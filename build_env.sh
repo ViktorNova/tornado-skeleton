@@ -27,7 +27,7 @@ fi
 INSTALL_PIP=true
 INSTALL_VENV=true
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BASE_GIT="https://github.com/gregory80/heroku-skeleton/tree/master"
+BASE_GIT="https://raw.github.com/gregory80/heroku-skeleton/tree/master"
 JS_FILES=(
   'http://code.jquery.com/jquery-1.9.1.js' 
   'http://backbonejs.org/backbone.js'
@@ -107,7 +107,7 @@ function readTmplFile {
     cat $1
   else
     # fail over to remote
-    curl -fsSL "$2" 2>/dev/null
+    curl -fLsSL "$2" 2>/dev/null
   fi
   return 0
 }
@@ -130,13 +130,12 @@ if $INSTALL_PIP; then
   echo "Installing pip from requirements.txt"
   cat "requirements.txt"
   pip install -r requirements.txt
-  echo "Storing pip freeze to requirements.txt"
-  pip freeze > requirements.txt
+  echo ls -la
 fi
 #
 # build the requirements file
 #
-
+# pip freeze > requirements.txt
 echo "This is a stub for tornado on heroku" > README.md
 #
 #
