@@ -27,7 +27,7 @@ fi
 INSTALL_PIP=true
 INSTALL_VENV=true
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BASE_GIT="https://raw.github.com/gregory80/heroku-skeleton/tree/master"
+BASE_GIT="https://raw.github.com/gregory80/heroku-skeleton/master"
 JS_FILES=(
   'http://code.jquery.com/jquery-1.9.1.js' 
   'http://backbonejs.org/backbone.js'
@@ -107,7 +107,7 @@ function readTmplFile {
     cat $1
   else
     # fail over to remote
-    curl -fLsSL "$2" 2>/dev/null
+    curl -fsSL "$2" 2>/dev/null
   fi
   return 0
 }
