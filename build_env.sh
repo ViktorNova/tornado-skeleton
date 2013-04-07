@@ -101,13 +101,13 @@ done
 popd > /dev/null
 #
 function readTmplFile {
-  if [ -f "$2" ]; then
+  if [ ! -f "$2" ]; then
     # echo "copying local file $1"
     # use the local copy
-    cat $2 > $1
+    cat "$2" > "$1"
   else
     # fail over to remote
-    # echo "Requesting $2"
+    echo "Requesting $3"
     curl -fsSL "$3" -o "$1" 2>/dev/null
   fi
   return 0
@@ -118,6 +118,7 @@ function readTmplFile {
 # leave the app/ dir
 popd > /dev/null
 #
+echo "Download the app_files"
 for kfile in ${APP_FILES[@]}
 do
   # echo "attempt to copy ${kfile}"
