@@ -103,6 +103,7 @@ popd > /dev/null
 function readTmplFile {
   if [ -f "$1" ];
   then
+    echo "copying local file $1"
     # use the local copy
     cat $1
   else
