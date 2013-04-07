@@ -101,7 +101,7 @@ done
 popd > /dev/null
 #
 function readTmplFile {
-  if [ ! -f "$2" ]; then
+  if [ -f "$2" ]; then
     # echo "copying local file $1"
     # use the local copy
     cat "$2" > "$1"
