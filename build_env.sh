@@ -127,13 +127,16 @@ done
 # only tornado is TRULY needed
 # the rest make like easier
 if $INSTALL_PIP; then
-  echo "Installing pip"
-  pip install -r "requirements.txt"
+  echo "Installing pip from requirements.txt"
+  cat "requirements.txt"
+  pip install -r requirements.txt
+  echo "Storing pip freeze to requirements.txt"
+  pip freeze > requirements.txt
 fi
 #
 # build the requirements file
 #
-pip freeze > requirements.txt
+
 echo "This is a stub for tornado on heroku" > README.md
 #
 #
