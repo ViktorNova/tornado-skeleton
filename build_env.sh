@@ -127,6 +127,7 @@ done
 # only tornado is TRULY needed
 # the rest make like easier
 if $INSTALL_PIP; then
+  echo "Installing pip"
   pip install -r "requirements.txt"
 fi
 #
