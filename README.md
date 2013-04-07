@@ -23,6 +23,9 @@ environment.
 Setup a Build Environment
 -------------
 
+[4/7/2013: you must checkout the entire project for the time being. The curl script
+sends an abort trap]
+
 The fastest way to setup in an enviroment. Creates a heroku-ready, 
 deployable environment in seconds.
 
