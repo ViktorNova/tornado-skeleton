@@ -6,7 +6,7 @@ requires
 
 */
 
-Mustache.tags = ["<%=", "%>"]; 
+
 // tonardo steals }} {{
 var helpView = {
 
