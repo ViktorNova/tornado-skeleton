@@ -78,7 +78,7 @@ if __name__ == "__main__":
 		# fetch script contents
 		script_str += read_url(compile_host, scripts, "")
 
-
+	print compile_static_str(script_str, output="errors")
 	# get stats for what we are compiling
 	print compile_static_str(script_str, output="statistics")
 	# print script_str
