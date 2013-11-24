@@ -64,41 +64,8 @@ application specific virtual env
 
 Folder Structure
 --------------
-Builds the following directory
-and file structure
+Builds the directory, see the build_env.sh for explicit file references
 
-    app/
-        webapp.py
-        ui_modules.py
-        config/
-            dev.conf
-        hooks/
-            pre-commit-msg.sh
-        static/
-            js/
-              jquery-1.9.1.js
-              backbone.js
-              mustache.js
-              underscore.js
-              app.js
-            css/
-            graphics/
-        scripts/
-            runlocal.sh
-            compile.sh
-            closure_compile.py
-        templates/
-            main.html        
-            ui_modules/
-                scripttag.html
-    venv/
-        bin/
-            activate
-    Procfile
-    requirements.txt
-    README.md
-    .env
-    .gitignore
 
 Additional Configuration
 ---------------------

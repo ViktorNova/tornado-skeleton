@@ -29,10 +29,13 @@ INSTALL_VENV=true
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASE_GIT="https://raw.github.com/gregory80/heroku-skeleton/master"
 JS_FILES=(
-  'http://code.jquery.com/jquery-1.9.1.js' 
+  'http://code.jquery.com/jquery-1.10.2.js' 
   'http://backbonejs.org/backbone.js'
   'http://underscorejs.org/underscore.js' 
   'https://raw.github.com/jeffreytierney/newT/master/newT.js'
+  'https://raw.github.com/janl/mustache.js/master/mustache.js'
+  'http://requirejs.org/docs/release/2.1.9/comments/require.js'
+  'http://requirejs.org/docs/release/2.1.9/r.js'
   # 'https://raw.github.com/janl/mustache.js/master/mustache.js'
   )
 APP_FILES=(
@@ -42,14 +45,11 @@ APP_FILES=(
   "requirements.txt"
   "app/webapp.py" 
   "app/templates/main.html"
-  "app/static/js/app.js" 
-  "app/scripts/compile.sh" 
-  "app/scripts/closure_compile.py" 
+  "app/static/js/App.js" 
+  "app/static/js/main.js" 
   "app/ui_modules.py"
   "app/scripts/runlocal.sh"
-  "app/scripts/compile.sh" 
   "app/templates/ui_modules/scripttag.html"
-  "app/hooks/pre-commit-msg.sh"
   )
 #
 # source in config file
@@ -88,8 +88,8 @@ touch webapp.py __init__.py config/dev.conf scripts/runlocal.sh
 #
 #
 # Add External JS Files
-mkdir -p static/js static/css static/graphics templates/ui_modules
-pushd static/js > /dev/null
+mkdir -p static/js/libs static/css static/graphics templates/ui_modules
+pushd static/js/libs > /dev/null
 echo "Fetching static JS library files"
 #
 for jsfile in ${JS_FILES[@]}
@@ -157,9 +157,9 @@ git add .
 git commit -m "initial commit"
 #
 # add hooks, hooks require web app started!
-chmod +x app/hooks/pre-commit-msg.sh
+# chmod +x app/hooks/pre-commit-msg.sh
 # requires abs path b/c is an alias
-ln -s $1/app/hooks/pre-commit-msg.sh .git/hooks/pre-commit
+# ln -s $1/app/hooks/pre-commit-msg.sh .git/hooks/pre-commit
 #
 #
 echo "...................................................."
