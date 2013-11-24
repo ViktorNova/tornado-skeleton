@@ -20,7 +20,6 @@ import sys
 import time
 import os
 import logging
-import ui_modules
 import json
 
 logging.basicConfig(level=logging.INFO)
@@ -71,8 +70,7 @@ class Application(tornado.web.Application):
                 (r"^/$", MainHandler),
                 (r"^/(.+)$", AppPagesHandler),
                 ]
-        settings = dict(
-            ui_modules=ui_modules,                   
+        settings = dict(              
             cookie_secret="CHANGEMEPL3ZABC123",
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
