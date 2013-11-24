@@ -43,9 +43,11 @@ requirejs.config({
 requirejs([
     'app',
     'WorkspaceRouter',
+    "views/HomepageView"
  
 
   ], function(App) {
     // kick off everthing here
+    console.log("initialize application");
     App.start();
 });

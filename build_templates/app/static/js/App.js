@@ -1,30 +1,23 @@
-/**
+/***
 
-
-requires
-  jQuery.js, backbone.js, mustache.js
+  requires
+    jQuery.js, backbone.js, mustache.js
 
 */
 
+(function() {
 
-// tonardo steals }} {{
-var helpView = {
+  window.App = window.App || {
+    VERSION: 'Oct 7, 2013 11:19am',
+    DEBUG: false
+  };
 
-  title:"help view"
-};
-var WorkspaceRouter = Backbone.Router.extend({
-  routes:{
-    "" : "homepage",
-    "help":"help"
-  },
-  homepage:function() {
-    console.log(arguments);
-    return this;
-  },
-  help:function() {
-    var output = Mustache.render("<h1>this is <%=title%></h1>", helpView);
-    $(".container").append(output);
+
+  App.start = function() {
+    console.log("The app starts")
+
+    App.router = new App.WorkspaceRouter();
+    Backbone.history.start({pushState: true}); 
   }
-});
 
-/**EOF*/
+})();

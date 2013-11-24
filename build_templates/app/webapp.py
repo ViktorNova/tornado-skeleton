@@ -71,7 +71,7 @@ class Application(tornado.web.Application):
                 (r"^/(.+)$", AppPagesHandler),
                 ]
         settings = dict(              
-            cookie_secret="CHANGEMEPL3ZABC123",
+            cookie_secret="CHANGEMEPL3ZABC123UAndMe",
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             debug=True,

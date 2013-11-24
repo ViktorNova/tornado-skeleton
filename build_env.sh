@@ -6,7 +6,7 @@
 # repos: https://github.com/gregory80/heroku-skeleton
 # 
 # Usage:
-#     bash <(curl -fsSL "http://bitly.com/heroku-skeleton") ~/path/to/app
+#     bash build_env.sh ~/path/to/app
 #     cd ~/path/to/app
 #     bash app/scripts/runlocal.sh #start server on port 5000
 # 
@@ -28,13 +28,16 @@ INSTALL_PIP=true
 INSTALL_VENV=true
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASE_GIT="https://raw.github.com/gregory80/heroku-skeleton/master"
-JS_FILES=(
+JS_LIB_FILES=(
   'http://code.jquery.com/jquery-1.10.2.js' 
   'http://backbonejs.org/backbone.js'
   'http://underscorejs.org/underscore.js' 
   'https://raw.github.com/jeffreytierney/newT/master/newT.js'
   'https://raw.github.com/janl/mustache.js/master/mustache.js'
+  )
+JS_FILES=(
   'http://requirejs.org/docs/release/2.1.9/comments/require.js'
+  'https://raw.github.com/requirejs/text/master/text.js'
   'http://requirejs.org/docs/release/2.1.9/r.js'
   # 'https://raw.github.com/janl/mustache.js/master/mustache.js'
   )
@@ -45,11 +48,14 @@ APP_FILES=(
   "requirements.txt"
   "app/webapp.py" 
   "app/templates/main.html"
+  "app/static/css/app.css" 
   "app/static/js/App.js" 
   "app/static/js/main.js" 
-  "app/ui_modules.py"
+  "app/static/templates/homepage.html" 
+  "app/static/js/WorkspaceRouter.js" 
+  "app/static/js/views/HomepageView.js" 
   "app/scripts/runlocal.sh"
-  "app/templates/ui_modules/scripttag.html"
+  
   )
 #
 # source in config file
@@ -88,8 +94,23 @@ touch webapp.py __init__.py config/dev.conf scripts/runlocal.sh
 #
 #
 # Add External JS Files
-mkdir -p static/js/libs static/css static/graphics templates/ui_modules
+mkdir -p static/js/libs static/templates static/js/views static/js/models static/js/collections 
+# now the CSS and others
+mkdir -p static/css static/graphics templates
+# begin download of JS LIB files
 pushd static/js/libs > /dev/null
+echo "Fetching static JS library files"
+#
+for jsfile in ${JS_LIB_FILES[@]}
+do
+  filepath=(${jsfile//\// })
+  curl ${jsfile} -o ${filepath[${#filepath[@]}-1]} 2&> /dev/null
+done
+#
+#
+popd > /dev/null
+
+pushd static/js > /dev/null
 echo "Fetching static JS library files"
 #
 for jsfile in ${JS_FILES[@]}
@@ -100,6 +121,8 @@ done
 #
 #
 popd > /dev/null
+
+
 #
 function readTmplFile {
   if [ -f "$2" ]; then
@@ -173,5 +196,6 @@ echo "Did you know? You can configure this script with ~/.build_env.config"
 echo "...................................................."
 #
 #
+terminal-notifier -message "Skeleton complete" -title "Installed!"
 exit 0
 
