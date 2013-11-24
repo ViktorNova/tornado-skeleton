@@ -1,4 +1,28 @@
 * {
 	margin:0;
 	padding:0;
+	text-outline: 0;
+	border:0;
+	-webkit-text-size-adjust: none;
+}
+.unstyled {
+	list-style: none;
+}
+body {
+	/*position: relative;*/
+	-webkit-font-smoothing: antialiased;
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);		
+	font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:18px;
+	/*margin-top:-40px;*/
+	line-height: 1.3em;
+	color:#1a1a1a;
+	overflow: visible;
+}
+h1,h2,h3,h4,h5,h6 {
+	/* over style, fix me! */
+	font-size:21px;
+	line-height: 1.3em;
+	font-weight: normal;
 }

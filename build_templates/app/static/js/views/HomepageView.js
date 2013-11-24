@@ -19,11 +19,11 @@ define([
     initialize:function() {
       console.log("App.HomepageView()");
 
-      this.model = new Backbone.Model();
-      this.model.on("sync", function() {
-        this.render();
-      }, this);
-      this.model.fetch({});
+      // this.model = new Backbone.Model();
+      // this.model.on("sync", function() {
+      //   this.render();
+      // }, this);
+      // this.model.fetch({});
     },
     render:function(data){
       var data = data || {};
